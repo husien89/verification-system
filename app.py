@@ -10,11 +10,15 @@ app = Flask(__name__)
 
 @app.route('/')
 def home():
-    return "<h1>Verification System is Running!</h1><p>Go to /qr for QR Code</p><p>Go to /pdf for Certificate PDF</p>"
+    return """
+    <h1>✅ نظام التحقق يعمل بنجاح! — Verification System is Running!</h1>
+    <p>📱 اذهب إلى الرابط /qr لإنشاء رمز QR — Go to /qr for QR Code</p>
+    <p>📄 اذهب إلى الرابط /pdf لإنشاء الشهادة — Go to /pdf for Certificate PDF</p>
+    """
 
 @app.route('/qr')
 def generate_qr():
-    data = "Verification Successful - Husien"
+    data = "تم التحقق بنجاح — Verification Successful"
     img = qrcode.make(data)
     buf = io.BytesIO()
     img.save(buf, format='PNG')
@@ -23,9 +27,9 @@ def generate_qr():
 
 @app.route('/pdf')
 def create_pdf():
-    student_name = "Husien"
+    student_name = "حسين — Husien"
     verification_code = str(uuid.uuid4())
-    qr_data = f"Verification Code: {verification_code}"
+    qr_data = f"رمز التحقق — Verification Code: {verification_code}"
     
     qr_img = qrcode.make(qr_data)
     qr_buf = io.BytesIO()
@@ -36,15 +40,16 @@ def create_pdf():
     c = canvas.Canvas(buffer, pagesize=A4)
     width, height = A4
     
-    c.setFont("Helvetica-Bold", 24)
-    c.drawCentredString(width/2, height-150, "VERIFICATION CERTIFICATE")
+    c.setFont("Helvetica-Bold", 22)
+    c.drawCentredString(width/2, height-150, "شهادة التحقق — Verification Certificate")
     
-    c.setFont("Helvetica", 16)
-    c.drawCentredString(width/2, height-250, f"Name: {student_name}")
-    c.drawCentredString(width/2, height-290, f"Verification Code: {verification_code}")
+    c.setFont("Helvetica", 14)
+    c.drawCentredString(width/2, height-250, "الاسم — Name: " + student_name)
+    c.drawCentredString(width/2, height-290, "رمز التحقق — Verification Code: " + verification_code)
+    c.drawCentredString(width/2, height-330, "تاريخ الإصدار — Issue Date: 2026-09-05")
     
     qr_reader = ImageReader(qr_buf)
-    c.drawImage(qr_reader, width/2 - 75, height-430, width=150, height=150)
+    c.drawImage(qr_reader, width/2 - 75, height-450, width=150, height=150)
     
     c.save()
     buffer.seek(0)
