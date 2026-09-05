@@ -218,7 +218,8 @@ CERT_HTML = '''
         </div>
 
         <div class="header">
-            <div class="title">شــهــادة تــصــديــق</div>
+            <div class="title">{% if data.cert_type == 'بكالوريوس' %}شهادة بكالوريوس{% elif data.cert_type == 'ماجستير' %}شهادة ماجستير{% elif data.cert_type == 'دكتوراه' %}شهادة دكتوراه{% elif data.cert_type == 'دبلوم' %}دبلوم{% elif data.cert_type == 'شهادة خبرة' %}شهادة خبرة{% elif data.cert_type == 'إفادة' %}إفادة رسمية{% else %}شهادة تصديق{% endif %}
+</div>
         </div>
 
         <div class="content">
